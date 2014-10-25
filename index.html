@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v2.0.0.js"></script>
+
+<script id="item-template" type="text/x-handlebars-template">
+<div>
+<h3>{{title}}</h3>
+<p>in {{subreddit}}; score: {{score}}</p>
+<p>{{body}}</p>
+</div>
+<hr/>
+</script>
+
+<script>
+var template = Handlebars.compile($("#item-template").html());
+
+var conn = new WebSocket("ws://localhost:8080");
+conn.onmessage = function (evt) {
+    var data = JSON.parse(evt.data);
+    $("body").append(template(data));
+    $("html, body").css({ scrollTop: $(document).height()-$(window).height() });
+};
+</script>
+</body>
+</html>
