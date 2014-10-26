@@ -40,6 +40,16 @@
        (map make-json)
        (map send-to-listener)))
 
+; transducers version
+(def pipeline
+  (comp
+    (filter pred)
+    (map uppercase-title)
+    (map make-json)
+    (map send-to-listener)))
+(def stream2
+  (sequence pipeline
+            (r/items (r/subreddit-new "all"))))
 
 ;;;;;;;;;;;; server stuff
 (def ^:dynamic ws nil)
@@ -60,4 +70,4 @@
   ; start server
   (run-server handler {:port 8080})
   ; process the stream
-  (dorun stream))
+  (dorun stream2))
