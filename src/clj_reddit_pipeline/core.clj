@@ -30,16 +30,6 @@
         small-item (into {} (map #(vector % (% item)) keep-keys))]
     (json/write-str small-item)))
 
-; lazy
-(def stream
-  (->> "all"
-       r/subreddit-new
-       r/items
-       (filter pred)
-       (map uppercase-title)
-       (map make-json)
-       (map send-to-listener)))
-
 ; transducers version
 (def pipeline
   (comp
@@ -47,7 +37,7 @@
     (map uppercase-title)
     (map make-json)
     (map send-to-listener)))
-(def stream2
+(def stream
   (sequence pipeline
             (r/items (r/subreddit-new "all"))))
 
@@ -70,4 +60,4 @@
   ; start server
   (run-server handler {:port 8080})
   ; process the stream
-  (dorun stream2))
+  (dorun stream))
