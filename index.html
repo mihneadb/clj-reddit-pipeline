@@ -24,8 +24,9 @@ var template = Handlebars.compile($("#item-template").html());
 var conn = new WebSocket("ws://localhost:8080");
 conn.onmessage = function (evt) {
     var data = JSON.parse(evt.data);
-    $("body").append(template(data));
-    $("html, body").css({ scrollTop: $(document).height()-$(window).height() });
+    var body = $("body");
+    body.append(template(data));
+    $(window).scrollTop($(document).height());
 };
 </script>
 </body>
